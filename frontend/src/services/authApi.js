@@ -57,7 +57,7 @@ export const userRegister = async (data) => {
 
 export async function deleteProduct(productId, token) {
   const res = await fetch(
-    `http://localhost:5000/api/products/${productId}`,
+    `${API_URL}/api/products/${productId}`,
     {
       method: "DELETE",
       headers: {
@@ -75,7 +75,7 @@ export async function deleteProduct(productId, token) {
 }
 
 export const adminLogout = async () => {
-  const res = await fetch("http://localhost:5000/api/auth/admin/logout", {
+  const res = await fetch("${API_URL}/api/auth/admin/logout", {
     method: "POST",
     credentials: "include", // 🔥 REQUIRED
   });
