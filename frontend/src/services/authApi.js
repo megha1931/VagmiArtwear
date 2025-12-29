@@ -1,6 +1,7 @@
 // frontend/src/services/authApi.js
 
 const API_URL = import.meta.env.VITE_API_URL;
+console.log("API_URL:", API_URL);
 
 // ADMIN LOGIN (ONLY LOGIN, NO REGISTER)
 export const adminLogin = async (data) => {
