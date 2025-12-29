@@ -4,7 +4,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 // ADMIN LOGIN (ONLY LOGIN, NO REGISTER)
 export const adminLogin = async (data) => {
-  const res = await fetch(`${API_URL}/admin/login`, {
+  const res = await fetch(`${API_URL}/api/auth/admin/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -21,7 +21,7 @@ export const adminLogin = async (data) => {
 
 // USER LOGIN
 export const userLogin = async (data) => {
-  const res = await fetch(`${API_URL}/user-login`, {
+  const res = await fetch(`${API_URL}/api/auth/user-login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export const userLogin = async (data) => {
 
 // USER REGISTER
 export const userRegister = async (data) => {
-  const res = await fetch(`${API_URL}/register`, {
+  const res = await fetch(`${API_URL}/api/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
