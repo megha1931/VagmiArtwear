@@ -60,7 +60,7 @@ function Navbar() {
               <NavItem to="/profile">Profile</NavItem>
 
               <button
-              type="submit"
+              type="button"
                 onClick={handleLogout}
                 className="
                   relative text-red-600

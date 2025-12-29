@@ -110,7 +110,7 @@ function Admin() {
             {loading ? "Saving..." : "Add Product"}
           </button>
           <button
-            onClick={() => navigate("/admin/products")}
+            onClick={() => navigate("api/auth/admin/products")}
             className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition disabled:opacity-60"
           >
             Manage Products

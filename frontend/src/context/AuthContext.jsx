@@ -5,9 +5,8 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // 🔥 NEW
+  const [loading, setLoading] = useState(true);
 
-  // 🔥 Restore auth safely on app load
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
@@ -17,7 +16,7 @@ export const AuthProvider = ({ children }) => {
       setUser(JSON.parse(storedUser));
     }
 
-    setLoading(false); // 🔥 auth check complete
+    setLoading(false); // 🔥 auth restore done
   }, []);
 
   const login = (token, userData) => {
@@ -34,8 +33,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, login, logout }}>
-      {!loading && children} {/* 🔥 wait before rendering app */}
+    <AuthContext.Provider value={{ token, user, loading, login, logout }}>
+      {children}
     </AuthContext.Provider>
   );
 };

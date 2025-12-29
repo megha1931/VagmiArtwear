@@ -1,22 +1,31 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const ProtectedRoute = ({ children, requiredRole }) => {
-  const { token, user } = useAuth();
+const ProtectedRoute = ({
+  children,
+  requiredRole,
+  redirectTo,
+}) => {
+  const { token, user, loading } = useAuth();
 
-  // Not logged in
-  if (!token) {
-    // Admin → admin login
+  // 🔥 WAIT until auth is restored
+  if (loading) {
+    return null; // or a loader
+  }
+
+  // 🔐 Not logged in
+  if (!token || !user) {
+    // Admin routes
     if (requiredRole === "admin") {
       return <Navigate to="/admin/login" replace />;
     }
 
-    // User → user login
-    return <Navigate to="/user-login" replace />;
+    // User routes
+    return <Navigate to={redirectTo || "/user-login"} replace />;
   }
 
-  // Logged in but wrong role
-  if (requiredRole && user?.role !== requiredRole) {
+  // 🔐 Logged in but wrong role
+  if (requiredRole && user.role !== requiredRole) {
     return <Navigate to="/home" replace />;
   }
 
@@ -24,5 +33,3 @@ const ProtectedRoute = ({ children, requiredRole }) => {
 };
 
 export default ProtectedRoute;
-
-
