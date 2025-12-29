@@ -15,7 +15,7 @@ connectDB();
 
 const app = express();
 app.use(cors({
-  origin: "http://localhost:5173", // 🔥 EXACT frontend URL
+  origin: "https://vagmiartwear.netlify.app", // 🔥 EXACT frontend URL
   credentials: true                // 🔥 REQUIRED for cookies
 }));
 app.use(express.json());
