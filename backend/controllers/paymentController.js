@@ -51,6 +51,10 @@ export const verifyPayment = async (req, res) => {
   if (expectedSign !== razorpay_signature) {
     return res.status(400).json({ message: "Payment verification failed" });
   }
+  console.log("✅ verifyPayment API HIT");
+
+   console.log("📦 Product ID:", productId);
+   console.log("👤 Order Details:", orderDetails);
 
   /* 📦 Save order */
   const product = await Product.findById(productId);
@@ -62,8 +66,16 @@ export const verifyPayment = async (req, res) => {
     orderId: razorpay_order_id,
   });
 
+
   /* ✉️ Send emails */
+  console.log("📧 About to call sendOrderEmail()");
+  try {
   await sendOrderEmail(order, product);
+  console.log("✅ sendOrderEmail() returned successfully");
+} catch (err) {
+  console.error("EMAIL FAILED:", err.message);
+}
 
   res.json({ message: "Payment verified & order placed" });
+  
 };
