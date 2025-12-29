@@ -1,64 +1,44 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-/* ================================
-   🔐 Create SMTP Transporter
-================================ */
-const getTransporter = () => {
-  const { MAIL_USER, MAIL_PASS } = process.env;
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-  if (!MAIL_USER || !MAIL_PASS) {
-    throw new Error("❌ Email credentials missing in environment variables");
-  }
-
-  return nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false, // STARTTLS
-    auth: {
-      user: MAIL_USER,
-      pass: MAIL_PASS, // Gmail App Password
-    },
-  });
-};
-
-/* ================================
-   📦 ORDER CONFIRMATION EMAIL
-================================ */
 export const sendOrderEmail = async (order, product) => {
   try {
-    const transporter = getTransporter();
+    await resend.emails.send({
+      from: "Vagmi Art Wear <orders@resend.dev>",
+      to: [
+        order.customer.email,
+        process.env.ADMIN_EMAIL
+      ],
+      subject: "Your Vagmi Order is Confirmed 🌸",
+      html: `
+        <h2>🎉 Order Confirmed – Vagmi Art Wear</h2>
 
-    const text = `
-🎉 Order Confirmed – Vagmi Art Wear
+        <p><strong>Product:</strong> ${product.name}</p>
+        <p><strong>Size:</strong> ${order.customer.size}</p>
 
-Product: ${product.name}
-Size: ${order.customer.size}
+        <h3>👤 Customer Details</h3>
+        <p>
+          ${order.customer.name}<br/>
+          ${order.customer.phone}<br/>
+          ${order.customer.email}
+        </p>
 
-👤 Customer Details
-Name: ${order.customer.name}
-Phone: ${order.customer.phone}
-Email: ${order.customer.email}
+        <h3>📍 Address</h3>
+        <p>
+          ${order.customer.address}<br/>
+          Pincode: ${order.customer.pincode}
+        </p>
 
-📍 Address
-${order.customer.address}
-Pincode: ${order.customer.pincode}
+        <p><strong>Payment ID:</strong> ${order.paymentId}</p>
 
-💳 Payment ID
-${order.paymentId}
-
-Thank you for supporting handcrafted art 🌸
-— Vagmi Art Wear
-`;
-
-    await transporter.sendMail({
-      from: `"Vagmi Art Wear" <${process.env.MAIL_USER}>`,
-      to: `${order.customer.email}, ${process.env.ADMIN_EMAIL}`,
-      subject: "Your Vagmi Order is Confirmed 🎉",
-      text,
+        <p>Thank you for supporting handcrafted art 🌸</p>
+        <p><strong>— Vagmi Art Wear</strong></p>
+      `,
     });
-  } catch (error) {
-    console.error("❌ Order email failed:", error.message);
-    throw error;
+
+    console.log("✅ Order email sent");
+  } catch (err) {
+    console.error("❌ Order email failed:", err);
   }
 };
-
